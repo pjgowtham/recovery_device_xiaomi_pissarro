@@ -1,5 +1,5 @@
 # For MTK DRM integration:
-service teei_daemon /vendor/bin/teei_daemon \
+service teei_daemon /system/bin/teei_daemon \
     -r 020b0000000000000000000000000000 \
     -r 020f0000000000000000000000000000 \
     -r 06090000000000000000000000000000 \
@@ -21,11 +21,10 @@ service teei_daemon /vendor/bin/teei_daemon \
     -t 98fb95bcb4bf42d26473eae48690d7ea \
     -t 7b66512021214487ba710a51d7ea78fe \
     -t 09010000000000000000000000000000
-    class core
-    user system
-    group system
+    user root
+    group root
     disabled
-   # oneshot
+    seclabel u:r:recovery:s0
 
 on boot && property:ro.boot.tee_type=2
     chown system system /sys/bus/platform/devices/utos/dcih_notify_test
@@ -229,7 +228,7 @@ on fs && property:ro.boot.tee_type=2
     chown system system /dev/utr_tui
     chmod 0660 /dev/utr_tui
     enable beanpod_check_keybox_service
-    enable vendor.keymaster-4-0-beanpod
+    enable keymaster-4-0-beanpod
     enable thh-2-0
     enable soter-1-0
     enable init_thh_service

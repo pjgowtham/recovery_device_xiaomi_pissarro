@@ -32,16 +32,44 @@ PRODUCT_BRAND := Xiaomi
 PRODUCT_MODEL := M2104K10I
 PRODUCT_MANUFACTURER := Xiaomi
 
+# API
+PRODUCT_SHIPPING_API_LEVEL := 30
+
 # Dynamic
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
+
+# A/B
+AB_OTA_UPDATER := true
+AB_OTA_PARTITIONS := boot system system_ext product vendor
+
+PRODUCT_PACKAGES += \
+    update_engine \
+    update_verifier
+
+
+$(call inherit-product, \
+    $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
+
+# Boot control HAL
+PRODUCT_PACKAGES += \
+    android.hardware.boot@1.1-service \
+    android.hardware.boot@1.1-impl \
+    #bootctrl.default
 
 # fastbootd
 PRODUCT_PACKAGES += \
     android.hardware.fastboot@1.0-impl-mock \
     fastbootd
+    
+# Additional target Libraries
+TARGET_RECOVERY_DEVICE_MODULES += \
+    libkeymaster4 \
+    libpuresoftkeymasterdevice \
+    ashmemd_aidl_interface-cpp \
+    libashmemd_client
 
-# HACK: Set vendor patch level
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.build.security_patch=2099-12-31 \
-    ro.bootimage.build.date.utc=0 \
-    ro.build.date.utc=0
+TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/ashmemd_aidl_interface-cpp.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libashmemd_client.so    

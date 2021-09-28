@@ -13,6 +13,13 @@ service keystore_auth /system/bin/keystore_auth
     disabled
     seclabel u:r:recovery:s0
 
+service keystore_auth /system/bin/keystore_auth
+    oneshot
+    user system
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
 service keystore /system/bin/keystore /tmp/misc/keystore
     user root
     group root drmrpc readproc log
@@ -22,26 +29,43 @@ service keystore /system/bin/keystore /tmp/misc/keystore
 service keymaster-4-0-beanpod /system/bin/android.hardware.keymaster@4.0-service.beanpod
     user root
     group root drmrpc
+    oneshot    
     disabled
     seclabel u:r:recovery:s0
 
 service keymaster-4-0-mitee /system/bin/android.hardware.keymaster@4.0-service.beanpod
     user root
     group root drmrpc
+    oneshot    
     disabled
     seclabel u:r:recovery:s0
 
 service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
     user root
     group root
+    oneshot
     disabled
     seclabel u:r:recovery:s0
 
+service boob-hal-1-1 /vendor/bin/hw/android.hardware.boot@1.1-service
+    interface android.hardware.boot@1.0::IBootControl default
+    interface android.hardware.boot@1.1::IBootControl default
+    class early_hal
+    user root
+    group root
+    seclabel u:r:recovery:s0
+
 on property:hwservicemanager.ready=true
-    start keymaster-4-0-beanpod
     start gatekeeper-1-0
 
+on property:hwservicemanager.ready=true && property:ro.boot.tee_type=1
+    start keymaster-4-0-mitee
+
+on property:hwservicemanager.ready=true && property:ro.boot.tee_type=2
+    start keymaster-4-0-beanpod
+
 on property:ro.crypto.state=unsupported
+    stop teei_daemon
     stop keymaster-4-0-beanpod
     stop keymaster-4-0-mitee
     stop gatekeeper-1-0
@@ -49,6 +73,7 @@ on property:ro.crypto.state=unsupported
     stop hwservicemanager
 
 on property:ro.crypto.state=unencrypted
+    stop teei_daemon
     stop keymaster-4-0-beanpod
     stop keymaster-4-0-mitee
     stop gatekeeper-1-0
@@ -56,6 +81,7 @@ on property:ro.crypto.state=unencrypted
     stop hwservicemanager
 
 on property:twrp.decrypt.done=true
+    stop teei_daemon
     stop keymaster-4-0-beanpod
     stop keymaster-4-0-mitee
     stop gatekeeper-1-0
@@ -68,3 +94,4 @@ on post-fs-data
 
 on boot
     start health-hal-2-1
+    start boob-hal-1-1
