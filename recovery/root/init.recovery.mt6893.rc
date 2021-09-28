@@ -1,0 +1,82 @@
+import /tee.rc
+import /trustonic.rc
+
+on init
+    export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw
+
+on fs
+    install_keyring
+
+    write /sys/class/power_supply/usb/otg_switch 1
+    write /sys/class/oplus_chg/usb/otg_switch 1
+
+on post-fs
+
+service keystore_auth /system/bin/keystore_auth
+    oneshot
+    user system
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service keystore /system/bin/keystore /tmp/misc/keystore
+    user root
+    group root drmrpc readproc log
+    disabled
+    seclabel u:r:recovery:s0
+
+service hal_cryptoeng_oppo /system/bin/vendor.oplus.hardware.cryptoeng@1.0-service
+    user root
+    group root input sdcard_rw sdcard_r
+    disabled
+    seclabel u:r:recovery:s0
+
+service keymaster-4-0 /system/bin/android.hardware.keymaster@4.0-service.trustonic
+    user root
+    group root drmrpc
+    disabled
+    seclabel u:r:recovery:s0
+
+service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+on property:hwservicemanager.ready=true
+    start hal_cryptoeng_oppo
+    start mobicore
+    start keymaster-4-0
+    start gatekeeper-1-0
+
+on property:ro.crypto.state=unsupported
+    stop hal_cryptoeng_oppo
+    stop mobicore
+    stop keymaster-4-0
+    stop gatekeeper-1-0
+    stop servicemanager
+    stop hwservicemanager
+
+on property:ro.crypto.state=unencrypted
+    stop hal_cryptoeng_oppo
+    stop mobicore
+    stop keymaster-4-0
+    stop gatekeeper-1-0
+    stop servicemanager
+    stop hwservicemanager
+
+on property:twrp.decrypt.done=true
+    stop hal_cryptoeng_oppo
+    stop mobicore
+    stop keymaster-4-0
+    stop gatekeeper-1-0
+    stop servicemanager
+    stop hwservicemanager
+
+on post-fs-data
+    mkdir /data/vendor_de 0770 system system
+    mkdir /data/vendor_de/0 0770 system system
+    mkdir /data/vendor_de/0/cryptoeng 0770 system system
+
+on boot
+    start health-hal-2-1
