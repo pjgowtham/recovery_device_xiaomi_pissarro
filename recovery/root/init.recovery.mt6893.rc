@@ -20,13 +20,6 @@ service keystore_auth /system/bin/keystore_auth
     disabled
     seclabel u:r:recovery:s0
 
-service keystore_auth /system/bin/keystore_auth
-    oneshot
-    user system
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
 service keystore /system/bin/keystore /tmp/misc/keystore
     user root
     group root drmrpc readproc log
@@ -52,14 +45,6 @@ service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
     group root
     oneshot
     disabled
-    seclabel u:r:recovery:s0
-
-service boob-hal-1-1 /vendor/bin/hw/android.hardware.boot@1.1-service
-    interface android.hardware.boot@1.0::IBootControl default
-    interface android.hardware.boot@1.1::IBootControl default
-    class early_hal
-    user root
-    group root
     seclabel u:r:recovery:s0
 
 on property:hwservicemanager.ready=true
@@ -91,10 +76,6 @@ on property:twrp.decrypt.done=true
     stop keymaster-4-0-mitee
     stop gatekeeper-1-0
 
-on post-fs-data
-    mkdir /data/vendor_de 0770 system system
-    mkdir /data/vendor_de/0 0770 system system
-
 on boot
     start health-hal-2-1
-    start boob-hal-1-1
+    start boot-hal-1-1
