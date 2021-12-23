@@ -1,11 +1,9 @@
 # Beanpod
 import /microtrust.rc
-#
 
 # Mitee
 import /miteelog.rc
 import /tee-supplicant.rc
-#
 
 on init
     export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw
@@ -14,6 +12,7 @@ on fs
     install_keyring
 
 on post-fs
+    start boot-hal-1-1
     start mtk.plpath.utils.link
 
     # Support A/B feature for EMMC and UFS boot region
@@ -105,8 +104,7 @@ on property:twrp.decrypt.done=true
     stop teei_daemon  
     stop keymaster-4-0-beanpod
     stop keymaster-4-0-mitee
-    stop gatekeeper-1-0
+    stop gatekeeper-1-0   
 
 on boot
     start health-hal-2-1
-    start boot-hal-1-1

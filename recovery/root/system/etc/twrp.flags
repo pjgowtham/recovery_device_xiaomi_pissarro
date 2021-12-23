@@ -4,8 +4,6 @@
 
 # Currently we dont have e2fsck compiled. So fs check would failed.
 # mount point       fstype    device                                                                flags
-/cache              ext4      /dev/block/by-name/rescue                                             flags=display="Cache";
-
 # Persistent Firmware & Properties
 /persist	    ext4      /dev/block/by-name/persist 			                    flags=display="Persist";fsflags=ro
 /persist_image	    emmc      /dev/block/by-name/persist 				            flags=display="Persist";backup=1

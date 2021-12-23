@@ -20,6 +20,9 @@ PRODUCT_SHIPPING_API_LEVEL := 30
 # Dynamic
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
+# Enable project quotas and casefolding for emulated storage without sdcardfs
+#$(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
+
 # A/B
 ENABLE_VIRTUAL_AB := true
 $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
@@ -35,17 +38,17 @@ AB_OTA_PARTITIONS += \
     vendor \
     odm \
     vbmeta \
-    vbmeta_system
+    vbmeta_system \
+    vbmeta_vendor
 
 PRODUCT_PACKAGES += \
-    otapreopt_script \
     update_engine \
     update_engine_sideload \
     update_verifier
 
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
-    POSTINSTALL_PATH_system=system/bin/otapreopt_script \
+    POSTINSTALL_PATH_system=system/bin/mtk_plpath_utils \
     FILESYSTEM_TYPE_system=ext4 \
     POSTINSTALL_OPTIONAL_system=true
 
@@ -66,5 +69,3 @@ TARGET_RECOVERY_DEVICE_MODULES += \
 TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
     $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4.so \
     $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so
- 
-
