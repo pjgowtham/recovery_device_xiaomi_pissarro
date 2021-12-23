@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-DEVICE_PATH := device/xiaomi/ares
+DEVICE_PATH := device/xiaomi/pissarro
 
 # For building with minimal manifest
 ALLOW_MISSING_DEPENDENCIES := true
@@ -33,20 +33,20 @@ TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a55
 
 # Bootloader
-TARGET_BOOTLOADER_BOARD_NAME := ares
+TARGET_BOOTLOADER_BOARD_NAME := pissarro
 TARGET_NO_BOOTLOADER := true
 TARGET_USES_UEFI := true
 
 # Platform
-TARGET_BOARD_PLATFORM := mt6893
+TARGET_BOARD_PLATFORM := mt6877
 
 # Assert
-TARGET_OTA_ASSERT_DEVICE := ares,aresin
+TARGET_OTA_ASSERT_DEVICE := pissarro,pissarroin,pissarroinpro,pissarropro
 
 # Kernel
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz
-TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
+TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb
 BOARD_BOOTIMG_HEADER_VERSION := 2
 BOARD_KERNEL_BASE := 0x40078000
 BOARD_KERNEL_PAGESIZE := 2048
@@ -60,8 +60,8 @@ BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
 BOARD_KERNEL_IMAGE_NAME := Image.gz
 
 ifeq ($(TARGET_PREBUILT_KERNEL),)
-  TARGET_KERNEL_CONFIG := ares_user_defconfig
-  TARGET_KERNEL_SOURCE := kernel/xiaomi/ares
+  TARGET_KERNEL_CONFIG := pissarro_user_defconfig
+  TARGET_KERNEL_SOURCE := kernel/xiaomi/pissarro
   TARGET_KERNEL_CLANG_COMPILE := true
 endif
 
@@ -145,7 +145,7 @@ BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
 BOARD_VNDK_VERSION := current
 
 # TWRP specific build flags
-TW_DEVICE_VERSION := beta_1
+TW_DEVICE_VERSION := beta
 TW_THEME := portrait_hdpi
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.usb0/lun.%d/file
 RECOVERY_SDCARD_ON_DATA := true

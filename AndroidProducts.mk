@@ -15,7 +15,4 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/twrp_ares.mk
-    
-COMMON_LUNCH_CHOICES := \
-    twrp_ares-eng
+    $(LOCAL_DIR)/twrp_pissarro.mk

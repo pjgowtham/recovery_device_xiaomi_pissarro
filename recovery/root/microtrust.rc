@@ -23,10 +23,11 @@ service teei_daemon /system/bin/teei_daemon \
     -t 09010000000000000000000000000000
     user root
     group root
-    disabled
     seclabel u:r:recovery:s0
+    disabled
+   # oneshot
 
-on boot && property:ro.boot.tee_type=2
+on boot
     chown system system /sys/bus/platform/devices/utos/dcih_notify_test
     chown system system /sys/bus/platform/devices/utos/dcih_wait_notify_test
     chown system system /sys/bus/platform/devices/utos/load_ut_drv
@@ -34,7 +35,7 @@ on boot && property:ro.boot.tee_type=2
     chown system system /sys/bus/platform/devices/utos/notify_ree_dci_handler
 
 #for All mode
-on load_persist_props_action && property:ro.boot.tee_type=2
+on load_persist_props_action
     write /proc/bootprof "start teei cfg (on load_persist_props_action)"
     mkdir /data/vendor/thh
     mkdir /data/vendor/thh/system
@@ -109,7 +110,7 @@ on load_persist_props_action && property:ro.boot.tee_type=2
     chown system system /data/vendor/key_provisioning
     write /proc/bootprof "start teei cfg end (on load_persist_props_action)"
 
-on property:vold.decrypt=trigger_restart_framework && property:ro.boot.tee_type=2
+on property:vold.decrypt=trigger_restart_framework
     write /proc/bootprof "start teei cfg (on trigger_restart_framework)"
     mkdir /data/vendor/thh
     mkdir /data/vendor/thh/system
@@ -184,7 +185,7 @@ on property:vold.decrypt=trigger_restart_framework && property:ro.boot.tee_type=
     restorecon_recursive /data/vendor/thh
     write /proc/bootprof "start teei cfg end (on trigger_restart_framework)"
 
-on post-fs && property:ro.boot.tee_type=2
+on post-fs
     # Set /mnt/vendor/persist/rpmb
     chown system system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
@@ -205,7 +206,7 @@ on post-fs && property:ro.boot.tee_type=2
     restorecon_recursive /persist
     restorecon_recursive /vendor/persist
 
-on fs && property:ro.boot.tee_type=2
+on fs
     chmod 0660 /dev/teei_client
     chown system system /dev/teei_client
     chmod 0660 /dev/teei_config
@@ -227,18 +228,12 @@ on fs && property:ro.boot.tee_type=2
     chown system system /dev/emmcrpmb0
     chown system system /dev/utr_tui
     chmod 0660 /dev/utr_tui
-    enable beanpod_check_keybox_service
-    enable keymaster-4-0-beanpod
-    enable thh-2-0
-    enable soter-1-0
-    enable init_thh_service
     write /proc/bootprof "start teei_daemon (on fs)"
     start teei_daemon
     write /proc/bootprof "start teei_daemon end (on fs)"
-    setprop ro.hardware.gatekeeper beanpod
 
-on property:vendor.crypto.fake_encrypt=1 && property:vold.post_fs_data_done=1 && property:ro.boot.tee_type=2
+on property:vendor.crypto.fake_encrypt=1 && property:vold.post_fs_data_done=1
     setprop vendor.soter.teei.crypto.state unencrypted
 
-on post-fs-data && property:ro.boot.tee_type=2
-	setprop vendor.soter.teei.logini "start"
+on post-fs-data
+    setprop vendor.soter.teei.logini "start"

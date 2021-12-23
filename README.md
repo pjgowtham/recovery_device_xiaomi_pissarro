@@ -1,24 +1,19 @@
 # TWRP Tree for Poco F3 GT / K40 Gaming
-* Brand : POCO/Xiaomi
+* Brand : Xiaomi
 * SoC Vendor : Mediatek
-* Chipset : Dimensity 1200
+* Chipset : Dimensity 920
 * Implementation : Virtual AB
+* Boot as recovery
 
-Spec sheet : https://www.gsmarena.com/xiaomi_poco_f3_gt-10886.php
-
-## Quirks
-* Uses bootimage for recovery. No recovery partition available.(mka bootimage when building)
-* Both of these devices use different keymaster hals - Beanpod for Poco F3 GT and Mitee for K40 Gaming
+Spec sheet : https://www.gsmarena.com/xiaomi_11i_hypercharge-11186.php
 
 ## Supported Variants
-* Poco F3 GT
-* Redmi K40 Gaming
+* Redmi note 11 pro
+* Redmi note 11 pro +
+* Xiaomi Mi 11i Hypercharge
 
 ## Credits
 * TWRP devs
-* Nord2 devs
-* @mastersenpai0405
-* Testers for actively testing
 
 ## References
 * https://github.com/CaptainThrowback/android_device_asus_sm8350-common
