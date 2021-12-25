@@ -153,7 +153,6 @@ BOARD_VNDK_VERSION := current
 TW_DEVICE_VERSION := beta
 TW_THEME := portrait_hdpi
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /config/usb_gadget/g1/functions/mass_storage.usb0/lun.%d/file
-RECOVERY_SDCARD_ON_DATA := true
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_REPACKTOOLS := true
 TWRP_INCLUDE_LOGCAT := true
