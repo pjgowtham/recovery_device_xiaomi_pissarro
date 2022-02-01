@@ -1,6 +1,10 @@
 # Beanpod
 import /microtrust.rc
 
+# Mitee
+import /miteelog.rc
+import /tee-supplicant.rc
+
 on init
     export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw
 
@@ -59,6 +63,13 @@ service keymaster-4-0-beanpod /system/bin/android.hardware.keymaster@4.0-service
     disabled
     seclabel u:r:recovery:s0
 
+service keymaster-4-0-mitee /system/bin/android.hardware.keymaster@4.0-service.mitee
+    user root
+    group root drmrpc
+    oneshot    
+    disabled
+    seclabel u:r:recovery:s0
+
 service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
     user root
     group root
@@ -68,22 +79,32 @@ service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
 
 on property:hwservicemanager.ready=true
     start gatekeeper-1-0
+
+on property:hwservicemanager.ready=true && property:ro.boot.tee_type=1
+    stop keymaster-4-0-beanpod
+    start keymaster-4-0-mitee
+
+on property:hwservicemanager.ready=true && property:ro.boot.tee_type=2
+    stop keymaster-4-0-mitee
     start keymaster-4-0-beanpod
 
 on property:ro.crypto.state=unsupported
     stop teei_daemon
     stop keymaster-4-0-beanpod
+    stop keymaster-4-0-mitee
     stop gatekeeper-1-0
 
 on property:ro.crypto.state=unencrypted
     stop teei_daemon    
     stop keymaster-4-0-beanpod
+    stop keymaster-4-0-mitee
     stop gatekeeper-1-0
 
 on property:twrp.decrypt.done=true
     stop teei_daemon  
     stop keymaster-4-0-beanpod
-    stop gatekeeper-1-0
+    stop keymaster-4-0-mitee
+    stop gatekeeper-1-0   
 
 on boot
     start health-hal-2-1

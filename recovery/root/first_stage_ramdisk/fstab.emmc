@@ -14,7 +14,7 @@ vendor /vendor ext4 ro wait,slotselect,avb,logical,first_stage_mount
 product /product ext4 ro wait,slotselect,avb,logical,first_stage_mount
 
 
-odm /odm ext4 ro wait,slotselect,avb,logical,first_stage_mount
+
 
 
 /dev/block/by-name/metadata /metadata ext4 noatime,nosuid,nodev,discard wait,check,formattable,first_stage_mount
@@ -102,10 +102,8 @@ odm /odm ext4 ro wait,slotselect,avb,logical,first_stage_mount
 
 /dev/block/by-name/pi_img /pi_img emmc defaults defaults
 /dev/block/by-name/boot_para /boot_para emmc defaults defaults
-
 /dev/block/by-name/odmdtbo /odmdtbo emmc defaults defaults
 /dev/block/by-name/dtbo /dtbo emmc defaults defaults
-
 
 /dev/block/by-name/otp /otp emmc defaults defaults
 
